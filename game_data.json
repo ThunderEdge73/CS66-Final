@@ -1,0 +1,37 @@
+{
+    "assets": {
+        "names": {
+            "Prefixes": ["Acolyte", "Wanderer", "Silent"],
+            "Names": ["Elena", "Cantor", "Magdalena", "Leo", "Mateo", "Vihan", "Gep"],
+            "Suffixes": ["the Austere", "of the Mists", "the Revered", "the Reviled", "the Diagonal"]
+        },
+        "base_stats": {
+            "hp": 100,
+            "attack": 15,
+            "defense": 10,
+            "mana": 0,
+            "xp": 0,
+            "speed": 10
+        },
+        "skills": {
+            "Focus": {"cost": 10, "parent": null, "effect": "mana_boost"},
+            "Fireball": {"cost": 20, "parent": "Focus", "effect": "damage"},
+            "Heal": {"cost": 20, "parent": "Focus", "effect": "heal"},
+            "Meteor": {"cost": 50, "parent": "Fireball", "effect": "mega_damage"}
+        },
+        "enemies": [
+            {"name": "Anomaly", "hp": 30, "attack": 10, "speed": 5},
+            {"name": "Skeleton", "hp": 15, "attack": 6, "speed": 15},
+            {"name": "Kobold", "hp": 10, "attack": 6, "speed": 15},
+            {"name": "Wight", "hp": 20, "attack": 8, "speed": 3}
+        ],
+        "locations": {
+            "Forest": {"description": "Dark, and old. No light seeps through the treetops.", "enemies": ["Anomaly", "Skeleton"], "loot": ["Potion", "Tome"], "coords": [0, 3]},
+            "Cave": {"description": "A faint drip, seemingly miles back. The shuffling of many feet, in the darkness..", "enemies": ["Kobold", "Wight"], "loot": ["Potion", "Potion"], "coords": [0, 1]},
+            "Town": {"description": "A bustling town square, a whirl of kind faces, ale, and merriment. A smith labors at her anvil.", "enemies": ["Skeleton", "Kobold"], "loot": ["Scroll", "Potion"], "coords": [0, 0]},
+            "City": {"description": "Old monuments and buildings in some lost architectural style. Many eyes peer out of towers.", "enemies": ["Wight", "Skeleton"], "loot": ["Scroll", "Scroll"], "coords": [0, 2]},
+            "Desert": {"description": "Waves of sand, a surface like glass, radiating heat. You can make out distant features. Or are they just mirages?", "enemies": ["Anomaly", "Kobold"], "loot": ["Potion", "Scroll"], "coords": [1, 1]},
+            "Mountains": {"description": "Jagged peaks protrude from an indiscernible mass of snow.", "enemies": ["Anomaly", "Wight"], "loot": ["Potion", "Potion"], "coords": [1, 2]}
+        }
+    }
+}
