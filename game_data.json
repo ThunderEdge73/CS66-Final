@@ -53,6 +53,32 @@
                 "effect": "mega_damage"
             }
         },
+        "allies": [
+            {
+                "name": "Dwarf",
+                "hp": 15,
+                "attack": 5,
+                "speed": 4 
+            },
+            {
+                "name": "Elf",
+                "hp": 20,
+                "attack": 3,
+                "speed": 20 
+            },
+            {
+                "name": "Wizard",
+                "hp": 10,
+                "attack": 8,
+                "speed": 10 
+            },
+            {
+                "name": "Saytr",
+                "hp": 18,
+                "attack": 4,
+                "speed": 15 
+            }
+        ],
         "enemies": [
             {
                 "name": "Anomaly",
@@ -86,6 +112,9 @@
                     "Anomaly",
                     "Skeleton"
                 ],
+                "allies": [
+                    "Elf"
+                ],
                 "loot": [
                     "Potion",
                     "Tome"
@@ -100,6 +129,9 @@
                 "enemies": [
                     "Kobold",
                     "Wight"
+                ],
+                "allies": [
+                    "Dwarf"
                 ],
                 "loot": [
                     "Potion",
@@ -116,6 +148,9 @@
                     "Skeleton",
                     "Kobold"
                 ],
+                "allies": [
+                    "Wizard"
+                ],
                 "loot": [
                     "Scroll",
                     "Potion"
@@ -130,6 +165,9 @@
                 "enemies": [
                     "Wight",
                     "Skeleton"
+                ],
+                "allies": [
+                    "Wizard"
                 ],
                 "loot": [
                     "Scroll",
@@ -146,6 +184,9 @@
                     "Anomaly",
                     "Kobold"
                 ],
+                "allies": [
+                    "Dwarf"
+                ],
                 "loot": [
                     "Potion",
                     "Scroll"
@@ -160,6 +201,9 @@
                 "enemies": [
                     "Anomaly",
                     "Wight"
+                ],
+                "allies": [
+                    "Saytr"
                 ],
                 "loot": [
                     "Potion",
