@@ -75,4 +75,4 @@ def get_tactical_report(all_enemies, key):
         name = enemy["name"]
         data = enemy[key]
         final_string += f"{name}: {data} {key}\n"
-    return final_string
+    return final_string[:-1]

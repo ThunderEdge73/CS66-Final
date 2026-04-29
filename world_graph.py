@@ -71,14 +71,14 @@ class World:
 def get_direction(start, end):
     direction = ""
     if start.y < end.y:
-        direction += "n"
+        direction += "north"
     elif start.y > end.y:
-        direction += "s"
+        direction += "south"
     if start.x < end.x:
-        direction += "e"
+        direction += "east"
     elif start.x > end.x:
-        direction += "w"
-    return direction
+        direction += "west"
+    return str.capitalize(direction)
 
 def get_distance(start, end):
     return int(sqrt((start.x - end.x) ** 2 + (start.y - end.y) ** 2) + 0.5)

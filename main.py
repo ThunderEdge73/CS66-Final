@@ -59,7 +59,7 @@ def main():
         # Show Context (Graph Node info)
         print(f"\nLOCATION: {hero.location}")
         
-        raw = input("\nCommand (move [dir], scan [stat], fight, skill [name], save, exit): ")
+        raw = input("\nCommand (Type help for a list of all commands): ")
         command = get_safe_input(raw)
         
         parts = command.split() # For example, the command might be "move north" - then parts = ["move", "north"]
@@ -70,7 +70,7 @@ def main():
             if len(parts) < 2:
                 print("Move where?")
                 continue
-            direction = parts[1]
+            direction = str.capitalize(parts[1])
             # Check Graph Adjacency
             if direction in hero.location.connections:
                 hero.location = hero.location.connections[direction]["target"]
@@ -128,11 +128,22 @@ def main():
         # But do that separately from this assignment.
         elif action == "save":
             save_game(hero)
-        
         elif action == "exit":
             print("Goodbye.")
             break
-        
+        elif action == "world":
+            print("")
+            print(game_world)
+        elif action == "help":
+            print("""
+move [direction] -> Move in the specified direction.
+skill [name?] -> If name is specified, tries to unlock the skill with the provided name.
+    Otherwise, will display all learned skills.
+fight -> Initiates a fight in the current area against an enemy.
+scan [stat] -> Scan the current area
+world -> Display the current world.
+save -> Save the game.
+exit -> Exit the game.""")
         else:
             print("Unknown command.")
 
