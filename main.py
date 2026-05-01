@@ -1,5 +1,5 @@
 from utils import load_game_data, get_safe_input, generate_character_name, get_tactical_report
-from entities import Hero, Enemy
+from entities import Hero, Enemy, Ally
 from world_graph import build_world
 from skill_tree import SkillTree
 from combat import run_battle
@@ -85,7 +85,7 @@ def main():
             e_data = random.choice(data['assets']['enemies'])
             enemy = Enemy(e_data['name'], e_data['hp'], e_data['attack'], e_data['speed'])
             
-            victory = run_battle(hero, enemy)
+            victory = run_battle(hero, enemy, hero.party)
             if not victory:
                 break # Game Over
 
@@ -121,6 +121,35 @@ def main():
                 print(f"Invalid stat to scan")
                 continue
             print(get_tactical_report(hero.location.enemies, checked_stat))
+        
+        elif action == "talk":
+            creature = hero.location.allies
+            ally_data = data["assets"]["allies"]
+            for i in range(len(ally_data)):
+                ally_creature = [ally_data[i]["name"]]
+                if ally_creature == creature:
+                    ally = Ally(ally_data[i]["name"], ally_data[i]["hp"], ally_data[i]["attack"], ally_data[i]["speed"])
+            ally_raw = input(f"\nWould you like to add {ally.name} to your party? [yes, no]: ")
+            ally_command = get_safe_input(ally_raw)
+            if ally_command == "no":
+                print(f"You did not add {ally.name} to your party.")
+            else: 
+                x = hero.party.add_member(ally)
+                print(x)
+                if x == "Party limit reached.":
+                    print(hero.party)
+                    party_raw = input(f"\nWould you like to replace a party member? [yes, no]: ")
+                    party_command = get_safe_input(party_raw)
+                    if party_command == "yes":
+                        replace_command = int(input(f"\nWhich member would you like to replace? [1, 2]: "))
+                        if replace_command == 1:
+                            hero.party.remove_member(hero.party.members[0])
+                            y = hero.party.add_member(ally)
+                            print(y)
+                        else: 
+                            hero.party.remove_member(hero.party.members[1])
+                            y = hero.party.add_member(ally)
+                            print(y)
         #  Saving and loading the game is done through serialization, a technique we have not learned. You can see more
         # of this technique in CS 67! For now, you can just use the functions I've provided in storage.py.
         # A cool way to improve this would be to also save other parts of the game state - the world, etc.
@@ -141,6 +170,7 @@ skill [name?] -> If name is specified, tries to unlock the skill with the provid
     Otherwise, will display all learned skills.
 fight -> Initiates a fight in the current area against an enemy.
 scan [stat] -> Scan the current area
+talk -> Talk to a potential ally
 world -> Display the current world.
 save -> Save the game.
 exit -> Exit the game.""")
