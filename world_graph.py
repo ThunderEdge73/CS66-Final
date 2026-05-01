@@ -1,12 +1,13 @@
 from utils import load_game_data
 from math import sqrt
 class Location:
-    def __init__(self, name, description, enemies, x, y):
+    def __init__(self, name, description, enemies, allies, x, y):
         self.name = name
         self.description = description
         self.x = x
         self.y = y
         self.enemies = enemies
+        self.allies = allies
         # Adjacency List (see add_connection)
         self.connections = {} 
 
@@ -108,7 +109,7 @@ def build_world():
             for enemy_data in enemies:
                 if enemy_data["name"] == enemy:
                     enemy_dicts.append(enemy_data)
-        new_location = Location(name, loc["description"], enemy_dicts, loc["coords"][0], loc["coords"][1])
+        new_location = Location(name, loc["description"], enemy_dicts, loc["allies"], loc["coords"][0], loc["coords"][1])
         world.add_node(new_location)
 
     # Next, define the connections (your call! but if you plan to build the map, connections should match coordinate info. You can feel free to modify the JSON file to align with your connetion schema).
