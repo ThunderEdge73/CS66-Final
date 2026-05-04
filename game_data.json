@@ -188,8 +188,14 @@
                 "hp": 30,
                 "attack": 10,
                 "speed": 5,
-                "xp": 30,
-                "mana": 5
+                "ai": {
+                    "type": "random",
+                    "choices": [
+                        {
+                            "type": "attack"
+                        }
+                    ]
+                }
             },
             {
                 "name": "Skeleton",

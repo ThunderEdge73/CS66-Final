@@ -21,7 +21,11 @@ def run_battle(hero, enemy, party):
     
     # SORTING: Order by speed descending. And no, you may not .sort() your way out of the main sorting problem in this assignment.
     combatants.sort(key=lambda x: x.speed, reverse=True)
-    
+    combatState = {
+        "hero": hero,
+        "allies": party_members,
+        "enemy": enemy
+    }
     print(f"Initiative Order: {[c.name for c in combatants]}")
     
     while hero.hp > 0 and enemy.hp > 0:

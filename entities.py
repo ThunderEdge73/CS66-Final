@@ -22,6 +22,7 @@ class Ally:
         self.hp = hp
         self.attack = attack
         self.speed = speed
+        self.max_hp = hp
 
     def take_damage(self, amount):
         self.hp -= amount
