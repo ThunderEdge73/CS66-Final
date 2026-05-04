@@ -68,6 +68,25 @@ class World:
             if i != self.min_y:
                 final_string += "\n"
         return final_string # Implement a method to print the world's map or details. Many ways to do this, up to you.
+    
+    def get_path(self, start, end, temp_stack = None, direction_stack = None):
+        curr_stack = temp_stack
+        curr_dirs = direction_stack
+        if temp_stack is None:
+            curr_stack = [start]
+            curr_dirs = []
+        for direction, connection in start.connections.items():
+            target = connection["target"]
+            if target.name == end.name:
+                curr_stack.append(target)
+                curr_dirs.append(direction)
+                return (curr_stack, curr_dirs)
+            if target not in curr_stack:
+                curr_stack.append(target)
+                curr_dirs.append(direction)
+                res = self.get_path(target, end, curr_stack, curr_dirs)
+                return res
+        return None
 
 def get_direction(start, end):
     direction = ""

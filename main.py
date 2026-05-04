@@ -182,7 +182,12 @@ def main():
                 print(f"Invalid stat to scan")
                 continue
             print(get_tactical_report(hero.location.enemies, checked_stat))
-        
+        elif action == "path":
+            if len(parts) != 3:
+                continue
+            start = game_world.locations[parts[1].title()]
+            end = game_world.locations[parts[2].title()]
+            print(game_world.get_path(start, end)[1])
         elif action == "talk":
             creature = hero.location.allies
             ally_data = data["assets"]["allies"]
