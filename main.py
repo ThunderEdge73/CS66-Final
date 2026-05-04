@@ -4,6 +4,7 @@ from world_graph import build_world
 from skill_tree import SkillTree
 from combat import run_battle
 from storage import save_game, load_game
+import random
 # yo
 #yoyo
 # yo yo yo
@@ -81,7 +82,7 @@ def main():
         # Combat
         elif action == "fight":
             # Spawn a random enemy for demo purposes - there are a lot of ways to make this smarter and more specific to location!
-            import random
+            
             e_data = random.choice(data['assets']['enemies'])
             enemy = Enemy(e_data['name'], e_data)
             
