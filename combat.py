@@ -33,12 +33,12 @@ def run_battle(hero, enemy, party):
                 if entity == hero:
                     print(f"\nYour turn! (HP: {hero.hp})")
                     input("Press Enter to Attack...") 
-                    dmg = hero.attack
+                    dmg = hero.attack * hero.strength
                     enemy.take_damage(dmg)
                     print(f"You hit {enemy.name} for {dmg} damage!")
                 else:
                     print(f"\n{enemy.name} attacks!")
-                    dmg = enemy.attack
+                    dmg = enemy.attack // hero.defense
                     hero.hp -= dmg
                     print(f"You took {dmg} damage!")
             if ally_one != None and ally_two == None:
@@ -46,7 +46,7 @@ def run_battle(hero, enemy, party):
                 if entity == hero:
                     print(f"\nYour turn! (HP: {hero.hp})")
                     input("Press Enter to Attack...") 
-                    dmg = hero.attack
+                    dmg = hero.attack * hero.strength
                     enemy.take_damage(dmg)
                     print(f"You hit {enemy.name} for {dmg} damage!")
                 elif entity == ally_one:
@@ -55,7 +55,7 @@ def run_battle(hero, enemy, party):
                     print(f"\n{ally_one.name} attacks for {dmg} damage!")
                 else:
                     print(f"\n{enemy.name} attacks!")
-                    dmg = enemy.attack
+                    dmg = enemy.attack // hero.defense
                     hero.hp -= dmg
                     print(f"You took {dmg} damage!")
             if ally_two != None and ally_one != None:
@@ -63,7 +63,7 @@ def run_battle(hero, enemy, party):
                 if entity == hero:
                     print(f"\nYour turn! (HP: {hero.hp})")
                     input("Press Enter to Attack...") 
-                    dmg = hero.attack
+                    dmg = hero.attack * hero.strength
                     enemy.take_damage(dmg)
                     print(f"You hit {enemy.name} for {dmg} damage!")
                 elif entity == ally_one:
@@ -76,15 +76,17 @@ def run_battle(hero, enemy, party):
                     print(f"\n{ally_two.name} attacks for {dmg} damage!")
                 else:
                     print(f"\n{enemy.name} attacks!")
-                    dmg = enemy.attack
+                    dmg = enemy.attack // hero.defense
                     hero.hp -= dmg
                     print(f"You took {dmg} damage!")
                 
             time.sleep(0.5) 
 
     if hero.hp > 0:
-        print(f"VICTORY! You defeated {enemy.name}.") # If you wanted to implement a looting system, you could do so here.
+        print(f"VICTORY! You defeated {enemy.name}. Gained {round(enemy.xp * hero.luck,1)} XP and {round(enemy.mana * hero.luck,1)} MANA") # If you wanted to implement a looting system, you could do so here.
         hero.log_event(f"Defeated {enemy.name}") # Add it to the hero's QuestLog
+        hero.xp.gain_xp(enemy.xp * hero.luck, hero)
+        hero.mana += enemy.mana * hero.luck
         return True
     else:
         print("DEFEAT... Game Over.")

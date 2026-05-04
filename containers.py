@@ -1,3 +1,4 @@
+import random
 class Quest:
     """A basic unit of a QuestLog - it's basically a node."""
     def __init__(self, data):
@@ -30,3 +31,45 @@ class QuestLog:
         if not quest_strings:
             return "No quests recorded."
         return " -> ".join(quest_strings)
+
+class XPBar:
+    def __init__(self):
+        self.progress = 0
+        self.cap = 100
+        self.level = 1
+        self.level_cap = False
+
+    def gain_xp(self, amount, hero):
+        if self.level_cap == False:
+            self.progress += amount
+            if self.progress >= self.cap:
+                self.level_up(hero)
+    
+    def level_up(self, hero):
+        self.level += 1
+        hero.level += 1
+        if hero.level == 6:
+            self.level_cap = True
+            self.progress = 0
+        else:
+            self.progress -= self.cap
+            self.cap *= 1.5
+            level_up_message = []
+            for i in range(3):
+                stat = random.choice(["max_hp", "defense", "attack", "strength", "speed", "luck"])
+                if stat == "max_hp":
+                    hero.max_hp += 10
+                    level_up_message.append("max_hp")
+                elif stat == "speed":
+                    hero.speed += 2
+                    level_up_message.append("speed")
+                elif stat == "luck":
+                    hero.luck += 0.2
+                    level_up_message.append("luck")
+            hero.level_up_message(level_up_message)
+    
+    def __repr__(self):
+        if self.level_cap == True:
+            return f"LVL: {self.level} | AT LEVEL CAP"
+        else:
+            return f"LVL: {self.level} | XP: {self.cap - self.progress} Until next level"

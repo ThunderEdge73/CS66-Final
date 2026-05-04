@@ -57,7 +57,7 @@ def main():
     # MAIN LOOP: This is where the game processes users' inputs one at a time.
     while True:
         # Show Context (Graph Node info)
-        print(f"\nLOCATION: {hero.location}")
+        print(f"---------------------------\nLOCATION: {hero.location}")
         
         raw = input("\nCommand (Type help for a list of all commands): ")
         command = get_safe_input(raw)
@@ -83,7 +83,7 @@ def main():
             # Spawn a random enemy for demo purposes - there are a lot of ways to make this smarter and more specific to location!
             import random
             e_data = random.choice(data['assets']['enemies'])
-            enemy = Enemy(e_data['name'], e_data['hp'], e_data['attack'], e_data['speed'])
+            enemy = Enemy(e_data['name'], e_data)
             
             victory = run_battle(hero, enemy, hero.party)
             if not victory:
@@ -93,6 +93,7 @@ def main():
         elif action == "skill":
             if len(parts) < 2:
                 print(f"Known skills: {hero.skills_unlocked}")
+                print(f"Available skills: {skill_tree.available_skills(hero)}")
                 continue
             skill_name = parts[1].capitalize()
 
@@ -100,14 +101,74 @@ def main():
                 print("You already know that.")
             
             # This is something you must TODO before it works - implement can_unlock, recursively.
-            elif skill_tree.can_unlock(skill_name, hero.skills_unlocked):
-                # (We skip XP cost checks for this demo to focus on game logic)
-                # But it'd be cool to have that. Otherwise it's kind of trivial to have skill unlocks at all.
-                # You could implement this if you wanted.
-                hero.learn_skill(skill_name)
-                print(f"You learned {skill_name}!")
             else:
-                print("You cannot learn that yet (Prerequisites missing!).")
+                can_unlock_skill = skill_tree.can_unlock(skill_name, hero)
+                if can_unlock_skill == True:
+                    hero.learn_skill(skill_tree.nodes[skill_name])
+                elif can_unlock_skill == "pre-req":
+                    print("You cannot learn that yet. (Prerequisites missing!)")
+                elif can_unlock_skill == "level":
+                    print("You cannot learn that yet. (Level is too low!)")
+                elif can_unlock_skill == "mana":
+                    print("You cannot learn that yet. (Insufficient mana!)")
+
+        elif action == "heal":
+            if len(parts) < 2:
+                heal_skills = "Healing skills available: "
+                for i in hero.skills_unlocked:
+                    if i == "Dia":
+                        heal_skills += "Dia: +30 HP, 3 Mana "
+                    elif i == "Diarama":
+                        heal_skills += "| Diarama: +60 HP, 6 Mana "
+                    elif i == "Diarahan":
+                        heal_skills += "| Diarahan: FULL HP, 12 Mana"
+                if heal_skills == "Healing skills available: ":
+                    heal_skills += "None"
+                print(heal_skills)
+                continue
+            heal = parts[1].lower()
+            if heal not in ["dia", "diarama", "diarahan"]:
+                print("Invalid skill")
+            else:
+                if hero.hp == hero.max_hp:
+                    print("You are already fully healed.")
+                elif heal == "dia":
+                    if "Dia" in hero.skills_unlocked:
+                        if hero.mana < 3:
+                            print("Insufficient mana.")
+                        else:
+                            hero.hp += 30
+                            hero.mana -= 3
+                            if hero.hp > hero.max_hp:
+                                hero.hp = hero.max_hp
+                            print(f"You healed! HP: {hero.hp} / {hero.max_hp}")
+                    else:
+                        print("You do not have that skill unlocked.")
+                elif heal == "diarama":
+                    if "Diarama" in hero.skills_unlocked:
+                        if hero.mana < 6:
+                            print("Insufficient mana.")
+                        else:
+                            hero.hp += 60
+                            hero.mana -= 6
+                            if hero.hp > hero.max_hp:
+                                hero.hp = hero.max_hp
+                            print(f"You healed! HP: {hero.hp} / {hero.max_hp}")
+                    else:
+                        print("You do not have that skill unlocked.")
+                else:
+                    if "Diarahan" in hero.skills_unlocked:
+                        if hero.mana < 12:
+                            print("Insufficient mana.")
+                        else:
+                            hero.hp = hero.max_hp
+                            hero.mana -= 12
+                            if hero.hp > hero.max_hp:
+                                hero.hp = hero.max_hp
+                            print(f"You healed! HP: {hero.hp} / {hero.max_hp}")
+                    else:
+                        print("You do not have that skill unlocked.")
+
         elif action == "scan":
             #TODO: Implement the scan command to show a tactical report of the current location using the get_tactical_report function from utils.py
             # You need to identify the right set of enemies (the ones at the location the hero is currently in)
@@ -167,13 +228,21 @@ def main():
             print("""
 move [direction] -> Move in the specified direction.
 skill [name?] -> If name is specified, tries to unlock the skill with the provided name.
-    Otherwise, will display all learned skills.
+    Otherwise, will display all learned/available skills.
 fight -> Initiates a fight in the current area against an enemy.
 scan [stat] -> Scan the current area
 talk -> Talk to a potential ally
 world -> Display the current world.
 save -> Save the game.
-exit -> Exit the game.""")
+exit -> Exit the game.\n""")
+            print(hero)
+
+        elif action == "xp":
+            hero.xp.gain_xp(95, hero)
+
+        elif action == "mana":
+            hero.mana += 50
+
         else:
             print("Unknown command.")
 

@@ -25,32 +25,135 @@
         },
         "base_stats": {
             "hp": 100,
+            "max_hp": 100,
+            "defense": 1,
             "attack": 15,
-            "defense": 10,
-            "mana": 0,
+            "strength": 1,
+            "speed": 10,
             "xp": 0,
-            "speed": 10
+            "mana": 0,
+            "luck": 1
         },
         "skills": {
-            "Focus": {
+            "Agi": {
                 "cost": 10,
-                "parent": null,
-                "effect": "mana_boost"
+                "level": 1,
+                "requirements": [],
+                "effect": "+ 2 attack"
             },
-            "Fireball": {
+            "Dia": {
+                "cost": 15,
+                "level": 1,
+                "requirements": ["Agi"],
+                "effect": "+ 30 hp"
+            },
+            "Life_bonus": {
+                "cost": 15,
+                "level": 2,
+                "requirements": ["Dia"],
+                "effect": "+ 15 max_hp"
+            },
+            "Rakukaja": {
                 "cost": 20,
-                "parent": "Focus",
-                "effect": "damage"
+                "level": 2,
+                "requirements": ["Agi"],
+                "effect": "+ 0.25 defense"
             },
-            "Heal": {
+            "Sukukaja": {
+                "cost": 15,
+                "level": 2,
+                "requirements": ["Agi"],
+                "effect": "+ 5 speed"
+            },
+            "Mana_bonus": {
                 "cost": 20,
-                "parent": "Focus",
-                "effect": "heal"
+                "level": 2,
+                "requirements": ["Life_bonus"],
+                "effect": "+ 0.5 luck"
             },
-            "Meteor": {
+            "Agilao": {
+                "cost": 25,
+                "level": 3,
+                "requirements": ["Agi"],
+                "effect": "+ 3 attack"
+            },
+            "Diarama": {
+                "cost": 30,
+                "level": 3,
+                "requirements": ["Dia"],
+                "effect": "+ 60 hp"
+            },
+            "Tarukaja": {
+                "cost": 30,
+                "level": 3,
+                "requirements": ["Rakukaja", "Sukukaja"],
+                "effect": "+ 0.25 strength"
+            },
+            "Mana_gain": {
+                "cost": 30,
+                "level": 3,
+                "requirements": ["Sukukaja", "Mana_bonus"],
+                "effect": "+ 1 luck"
+            },
+            "Life_gain": {
+                "cost": 25,
+                "level": 4,
+                "requirements": ["Life_bonus", "Rakukaja"],
+                "effect": "+ 30 max_hp"
+            },
+            "Rakukajaon": {
+                "cost": 35,
+                "level": 4,
+                "requirements": ["Rakukaja"],
+                "effect": "+ 0.5 defense"
+            },
+            "Sukukajaon": {
+                "cost": 25,
+                "level": 4,
+                "requirements": ["Sukukaja"],
+                "effect": "+ 8 speed"
+            },
+            "Agidyne": {
                 "cost": 50,
-                "parent": "Fireball",
-                "effect": "mega_damage"
+                "level": 5,
+                "requirements": ["Agilao", "Tarukaja"],
+                "effect": "+ 5 attack"
+            },
+            "Tarukajaon": {
+                "cost": 45,
+                "level": 5,
+                "requirements": ["Tarukaja"],
+                "effect": "+ 0.5 strength"
+            },
+            "Mana_surge": {
+                "cost": 45,
+                "level": 5,
+                "requirements": ["Sukukajaon", "Mana_gain"],
+                "effect": "+ 1.5 luck"
+            },
+            "Trisagion": {
+                "cost": 65,
+                "level": 6,
+                "requirements": ["Agidyne", "Tarukajaon"],
+                "effect": "+ 7 attack"
+            },
+            "Diarahan": {
+                "cost": 60,
+                "level": 2,
+                "requirements": ["Diarama", "Mana_surge"],
+                "effect": "+ 999 hp"
+            },
+            "Life_surge": {
+                "cost": 60,
+                "level": 6,
+                "requirements": ["Life_gain", "Rakukajaon"],
+                "effect": "+ 45 max_hp"
+            },
+            "Luster_candy": {
+                "cost": 75,
+                "level": 6,
+                "requirements": ["Rakukajaon", "Sukukajaon", "Tarukajaon"],
+                "effect": "+ 0.75 strength defense"
             }
         },
         "allies": [
@@ -84,25 +187,33 @@
                 "name": "Anomaly",
                 "hp": 30,
                 "attack": 10,
-                "speed": 5
+                "speed": 5,
+                "xp": 30,
+                "mana": 5
             },
             {
                 "name": "Skeleton",
                 "hp": 15,
                 "attack": 6,
-                "speed": 15
+                "speed": 15,
+                "xp": 15,
+                "mana": 3
             },
             {
                 "name": "Kobold",
                 "hp": 10,
                 "attack": 6,
-                "speed": 15
+                "speed": 15,
+                "xp": 10,
+                "mana": 3
             },
             {
                 "name": "Wight",
                 "hp": 20,
                 "attack": 8,
-                "speed": 3
+                "speed": 3,
+                "xp": 20,
+                "mana": 4
             }
         ],
         "locations": {
