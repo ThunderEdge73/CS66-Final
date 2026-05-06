@@ -189,8 +189,7 @@ def main():
                     if party_command == "yes":
                         replace_command = int(input(f"\nWhich member would you like to replace? [1, 2]: "))
                         if replace_command == 1:
-                            hero.party.remove_member(hero.party.members[0])
-                            y = hero.party.add_member(ally)
+                            y = hero.party.replace_member(hero.party.members[0], ally)
                             print(y)
                         else: 
                             hero.party.remove_member(hero.party.members[1])
