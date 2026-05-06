@@ -56,10 +56,13 @@ class XPBar:
             self.cap *= 1.5
             level_up_message = []
             for i in range(3):
-                stat = random.choice(["max_hp", "defense", "attack", "strength", "speed", "luck"])
+                stat = random.choice(["max_hp", "attack", "speed", "luck"])
                 if stat == "max_hp":
                     hero.max_hp += 10
                     level_up_message.append("max_hp")
+                elif stat == "attack":
+                    hero.attack += 1
+                    level_up_message.append("attack")
                 elif stat == "speed":
                     hero.speed += 2
                     level_up_message.append("speed")

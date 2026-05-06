@@ -27,7 +27,7 @@
             "hp": 100,
             "max_hp": 100,
             "defense": 1,
-            "attack": 15,
+            "attack": 10,
             "strength": 1,
             "speed": 10,
             "xp": 0,
@@ -36,124 +36,164 @@
         },
         "skills": {
             "Agi": {
+                "type": "attack",
+                "use_cost": 3,
                 "cost": 10,
                 "level": 1,
                 "requirements": [],
-                "effect": "+ 2 attack"
+                "effect": "20 damage"
             },
             "Dia": {
+                "type": "heal",
+                "use_cost": 3,
                 "cost": 15,
                 "level": 1,
                 "requirements": ["Agi"],
-                "effect": "+ 30 hp"
+                "effect": "30 hp"
             },
             "Life_bonus": {
+                "type": "passive",
+                "use_cost": null,
                 "cost": 15,
                 "level": 2,
                 "requirements": ["Dia"],
                 "effect": "+ 15 max_hp"
             },
             "Rakukaja": {
+                "type": "buff",
+                "use_cost": 8,
                 "cost": 20,
                 "level": 2,
                 "requirements": ["Agi"],
-                "effect": "+ 0.25 defense"
+                "effect": "0.25 defense"
             },
             "Sukukaja": {
+                "type": "passive",
+                "use_cost": null,
                 "cost": 15,
                 "level": 2,
                 "requirements": ["Agi"],
                 "effect": "+ 5 speed"
             },
             "Mana_bonus": {
+                "type": "passive",
+                "use_cost": null,
                 "cost": 20,
                 "level": 2,
                 "requirements": ["Life_bonus"],
                 "effect": "+ 0.5 luck"
             },
             "Agilao": {
+                "type": "attack",
+                "use_cost": 6,
                 "cost": 25,
                 "level": 3,
                 "requirements": ["Agi"],
-                "effect": "+ 3 attack"
+                "effect": "25 damage"
             },
             "Diarama": {
+                "type": "heal",
+                "use_cost": 6,
                 "cost": 30,
                 "level": 3,
                 "requirements": ["Dia"],
-                "effect": "+ 60 hp"
+                "effect": "60 hp"
             },
             "Tarukaja": {
+                "type": "buff",
+                "use_cost": 8,
                 "cost": 30,
                 "level": 3,
                 "requirements": ["Rakukaja", "Sukukaja"],
-                "effect": "+ 0.25 strength"
+                "effect": "0.25 strength"
             },
             "Mana_gain": {
+                "type": "passive",
+                "use_cost": null,
                 "cost": 30,
                 "level": 3,
                 "requirements": ["Sukukaja", "Mana_bonus"],
                 "effect": "+ 1 luck"
             },
             "Life_gain": {
+                "type": "passive",
+                "use_cost": null,
                 "cost": 25,
                 "level": 4,
                 "requirements": ["Life_bonus", "Rakukaja"],
                 "effect": "+ 30 max_hp"
             },
             "Rakukajaon": {
+                "type": "buff",
+                "use_cost": 16,
                 "cost": 35,
                 "level": 4,
                 "requirements": ["Rakukaja"],
-                "effect": "+ 0.5 defense"
+                "effect": "0.5 defense"
             },
             "Sukukajaon": {
+                "type": "passive",
+                "use_cost": null,
                 "cost": 25,
                 "level": 4,
                 "requirements": ["Sukukaja"],
                 "effect": "+ 8 speed"
             },
             "Agidyne": {
+                "type": "attack",
+                "use_cost": 12,
                 "cost": 50,
                 "level": 5,
                 "requirements": ["Agilao", "Tarukaja"],
-                "effect": "+ 5 attack"
+                "effect": "30 damage"
             },
             "Tarukajaon": {
+                "type": "buff",
+                "use_cost": 16,
                 "cost": 45,
                 "level": 5,
                 "requirements": ["Tarukaja"],
-                "effect": "+ 0.5 strength"
+                "effect": "0.5 strength"
             },
             "Mana_surge": {
+                "type": "passive",
+                "use_cost": null,
                 "cost": 45,
                 "level": 5,
                 "requirements": ["Sukukajaon", "Mana_gain"],
                 "effect": "+ 1.5 luck"
             },
             "Trisagion": {
+                "type": "attack",
+                "use_cost": 18,
                 "cost": 65,
                 "level": 6,
                 "requirements": ["Agidyne", "Tarukajaon"],
-                "effect": "+ 7 attack"
+                "effect": "40 damage"
             },
             "Diarahan": {
+                "type": "heal",
+                "use_cost": 12,
                 "cost": 60,
                 "level": 2,
                 "requirements": ["Diarama", "Mana_surge"],
-                "effect": "+ 999 hp"
+                "effect": "999 hp"
             },
             "Life_surge": {
+                "type": "passive",
+                "use_cost": null,
                 "cost": 60,
                 "level": 6,
                 "requirements": ["Life_gain", "Rakukajaon"],
                 "effect": "+ 45 max_hp"
             },
             "Luster_candy": {
+                "type": "buff",
+                "use_cost": 20,
                 "cost": 75,
                 "level": 6,
                 "requirements": ["Rakukajaon", "Sukukajaon", "Tarukajaon"],
-                "effect": "+ 0.75 strength defense"
+                "effect": "0.75 strength defense"
             }
         },
         "allies": [

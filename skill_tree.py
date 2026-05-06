@@ -21,7 +21,9 @@ Megido - Non-elemental attack skill, variants: Megidola, Megidolaon, Morning Sta
 class SkillNode:
     def __init__(self, name, data):
         self.name = name
+        self.type = data['type']
         self.cost = data['cost']
+        self.use_cost = data['use_cost']
         self.level = data['level']
         self.effect = data['effect'].split()
         self.req_names = data['requirements'] # String name of the parent
@@ -52,7 +54,7 @@ class SkillTree:
     
     def check_skills(self, unlocked_skills):
         skills_list = []
-        if unlocked_skills == []:
+        if unlocked_skills == {}:
             skills_list.append("Agi")
         else:
             for skill in self.nodes:

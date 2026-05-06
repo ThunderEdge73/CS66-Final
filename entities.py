@@ -6,8 +6,8 @@ class Enemy:
         self.hp = enemy_stats['hp']
         self.attack = enemy_stats['attack']
         self.speed = enemy_stats['speed']
-        self.xp = enemy_stats['xp']
-        self.mana = enemy_stats['mana']
+        self.xp = enemy_stats['hp']
+        self.mana = enemy_stats['attack']
     
     def take_damage(self, amount):
         self.hp -= amount
@@ -51,27 +51,25 @@ class Hero:
         self.quest_log = QuestLog() 
   
         # (New stuff)
-        self.skills_unlocked = [] 
+        self.skills_unlocked = {} 
         self.location = None 
 
     def learn_skill(self, skill):
-        self.skills_unlocked.append(skill.name)
+        self.skills_unlocked[skill.name] = skill
         self.mana -= skill.cost
-        self.process_skill(skill)
+        if skill.type == "passive":
+            self.process_skill(skill)
+        else:
+            print(f"You learned {skill.name}!")
 
     def process_skill(self, skill):
         effect = skill.effect
         modifier = float(effect[1])
         stat = effect[2]
         return_string = f"You learned {skill.name}! "
-        if len(effect) == 4:
-            self.strength += modifier
-            self.defense += modifier
-            return_string += f"STR and DEF increased by {modifier}"
-        elif stat == "max_hp":
+        if stat == "max_hp":
             self.max_hp += int(modifier)
             return_string += f"MAX HP increased by {int(modifier)}"
-            return_string += f"DEF increased by {modifier}"
         elif stat == "speed":
             self.speed += int(modifier)
             return_string += f"SPD increased by {int(modifier)}"
@@ -88,12 +86,8 @@ class Hero:
         for stat in message:
             if stat == "max_hp":
                 return_string += "\nMAX HP increased by 10"
-            elif stat == "defense":
-                return_string += "\nDEF increased by 0.1"
             elif stat == "attack":
                 return_string += "\nATK increased by 1"
-            elif stat == "strength":
-                return_string += "\nSTR increased by 0.1"
             elif stat == "speed":
                 return_string += "\nSPD increased by 2"
             else:
@@ -101,7 +95,7 @@ class Hero:
         print(return_string)
 
     def __str__(self):
-        return f"[HERO] {self.name} \nHP: {self.hp} / {self.max_hp} | DEF: {self.defense} \nATK: {self.attack} | STR: {self.strength} \nSPD: {self.speed} | LUCK: {self.luck} \n{self.xp} \nMANA: {self.mana} \n\nParty: \n{self.party}"
+        return f"[HERO] {self.name} \nHP: {self.hp} / {self.max_hp} \nMANA: {self.mana} | ATK: {self.attack} \nSPD: {self.speed} | LUCK: {self.luck} \n{self.xp} \n\nParty: \n{self.party}"
 
     def __add__(self, item):
         self.inventory.append(item)

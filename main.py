@@ -93,7 +93,11 @@ def main():
         # Skills
         elif action == "skill":
             if len(parts) < 2:
-                print(f"Known skills: {hero.skills_unlocked}")
+                skills_list = ""
+                for skill in hero.skills_unlocked.keys():
+                    skills_list += f"{skill} | "
+                print("Known skills: " + skills_list)
+                print(f"Current mana: {hero.mana}")
                 print(f"Available skills: {skill_tree.available_skills(hero)}")
                 continue
             skill_name = parts[1].capitalize()
@@ -127,48 +131,23 @@ def main():
                     heal_skills += "None"
                 print(heal_skills)
                 continue
-            heal = parts[1].lower()
-            if heal not in ["dia", "diarama", "diarahan"]:
+            heal = parts[1].capitalize()
+            if heal not in ["Dia", "Diarama", "Diarahan"]:
                 print("Invalid skill")
             else:
                 if hero.hp == hero.max_hp:
                     print("You are already fully healed.")
-                elif heal == "dia":
-                    if "Dia" in hero.skills_unlocked:
-                        if hero.mana < 3:
-                            print("Insufficient mana.")
-                        else:
-                            hero.hp += 30
-                            hero.mana -= 3
-                            if hero.hp > hero.max_hp:
-                                hero.hp = hero.max_hp
-                            print(f"You healed! HP: {hero.hp} / {hero.max_hp}")
+                elif heal in hero.skills_unlocked:
+                    if hero.mana < skill_tree.nodes[heal].use_cost:
+                        print("Insufficient mana")
                     else:
-                        print("You do not have that skill unlocked.")
-                elif heal == "diarama":
-                    if "Diarama" in hero.skills_unlocked:
-                        if hero.mana < 6:
-                            print("Insufficient mana.")
-                        else:
-                            hero.hp += 60
-                            hero.mana -= 6
-                            if hero.hp > hero.max_hp:
-                                hero.hp = hero.max_hp
-                            print(f"You healed! HP: {hero.hp} / {hero.max_hp}")
-                    else:
-                        print("You do not have that skill unlocked.")
-                else:
-                    if "Diarahan" in hero.skills_unlocked:
-                        if hero.mana < 12:
-                            print("Insufficient mana.")
-                        else:
+                        hero.hp += int(skill_tree.nodes[heal].effect[0])
+                        hero.mana -= skill_tree.nodes[heal].use_cost
+                        if hero.hp > hero.max_hp:
                             hero.hp = hero.max_hp
-                            hero.mana -= 12
-                            if hero.hp > hero.max_hp:
-                                hero.hp = hero.max_hp
-                            print(f"You healed! HP: {hero.hp} / {hero.max_hp}")
-                    else:
-                        print("You do not have that skill unlocked.")
+                        print(f"You healed! HP: {hero.hp} / {hero.max_hp}")
+                else:
+                    print("You do not have that skill unlocked.")
 
         elif action == "scan":
             #TODO: Implement the scan command to show a tactical report of the current location using the get_tactical_report function from utils.py
