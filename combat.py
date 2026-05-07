@@ -2,8 +2,11 @@ import time
 from utils import get_safe_input
 
 def run_battle(hero, enemy, party):
+    "Modified the battle loop to include party members and extra hero actions for battle"
+    "O(nlogn) because of the sort statement and number of combatants"
     print(f"\n--- BATTLE STARTED: {hero.name} vs {enemy.name} ---")
     party_members = party.get_allies()
+    #sets a list of combatants based on the length of the party coordinating to each ally
     if len(party_members) == 0:
         combatants = [hero, enemy]
         ally_one = None
@@ -40,29 +43,29 @@ def run_battle(hero, enemy, party):
             if ally_one == None and ally_two == None:
                 #battle with no allies
                 if entity == hero:
-                    if guard == True:
+                    if guard == True: #turns off the heros guard (activated via action command)
                         guard = False
                         hero.defense -= 1
                     print(f"\nYour turn! (HP: {hero.hp} / {hero.max_hp}, MANA: {hero.mana})")
-                    action = get_action(hero)
+                    action = get_action(hero) #instead of attacking allows players to utilize new commands
                     if action[0] == "attack":
-                        dmg = round(hero.attack * hero.strength)
+                        dmg = round(hero.attack * hero.strength) #attack is now combined with hero strength
                         enemy.take_damage(dmg)
                         print(f"You hit {enemy.name} for {dmg} damage!")
                     elif action[0] == "skill":
-                        skill = hero.skills_unlocked[action[1].capitalize()]
+                        skill = hero.skills_unlocked[action[1].capitalize()] #use skills in skill tree
                         if skill.type == 'attack':
                             dmg = round(int(skill.effect[0]) * hero.strength)
-                            hero.mana -= skill.use_cost
+                            hero.mana -= skill.use_cost #each skill has a manna cost associated with it
                             enemy.take_damage(dmg)
                             print(f"You hit {enemy.name} for {dmg} damage!")
-                        elif skill.type == 'heal':
+                        elif skill.type == 'heal': #allows hero to heal mid battle
                             hero.hp += int(skill.effect[0])
                             hero.mana -= skill.use_cost
                             if hero.hp > hero.max_hp:
                                 hero.hp = hero.max_hp
                             print(f"You healed! HP: {hero.hp} / {hero.max_hp}")
-                        elif skill.type == 'buff':
+                        elif skill.type == 'buff': #allows you to increase hero stats using skills
                             if len(skill.effect) == 3:
                                 hero.strength += 0.75
                                 hero.defense += 0.75
@@ -73,7 +76,7 @@ def run_battle(hero, enemy, party):
                             elif skill.effect[1] == 'defense':
                                 hero.defense += float(skill.effect[0])
                                 hero.mana -= skill.use_cost
-                    elif action[0] == "defend":
+                    elif action[0] == "defend": #sets heros guard to on
                         guard = True
                         hero.defense += 1
                 else:
@@ -83,7 +86,7 @@ def run_battle(hero, enemy, party):
                     print(f"You took {dmg} damage!")
             if ally_one != None and ally_two == None:
                 #battle with one ally
-                if entity == hero:
+                if entity == hero: #hero and enemy actions function the same as in a 1v1 battle
                     if guard == True:
                         guard = False
                         hero.defense -= 1
@@ -121,6 +124,7 @@ def run_battle(hero, enemy, party):
                         guard = True
                         hero.defense += 1
                 elif entity == ally_one:
+                    #ally acts in the same manner as the enemy but attacking the enemy rather than the hero
                     dmg = ally_one.attack
                     enemy.take_damage(dmg)
                     print(f"\n{ally_one.name} attacks for {dmg} damage!")
@@ -195,25 +199,33 @@ def run_battle(hero, enemy, party):
         return False
 
 def get_action(hero):
+    '''
+    Allows users to access extra commands in the battle sequence
+    Parameters: none
+    Returns: the action the user wants to use
+    Best Case: O(1)
+    Worst Case: O(n)
+    '''
     valid_action = False
-    while not valid_action:
+    while not valid_action: #while loop until the user enters a valid command
         action = get_safe_input(input("\nWhat will you do? [attack, skill (name), defend]... ")).split()
         if action[0] in ["attack", "defend"]:
             valid_action = True
             continue
         elif action[0] == "skill":
-            if len(action) == 1:
+            if len(action) == 1: #scenario in which user enters "skill" 
                 skills_list = "Avilable skills: "
                 for skill in hero.skills_unlocked.values():
                     if skill == "Luster Candy":
                         skills_list += "Luster_candy: 0.75 Strength/Defense, 20 Mana | "
                     elif skill.type != "passive":
                         skills_list += f"{skill.name}: {skill.effect[0]} {skill.effect[1]}, {skill.use_cost} Mana | "
-                print(f"{skills_list} \n")
+                print(f"{skills_list} \n") #gives the user a list of available skills that are not passive
                 continue
-            elif len(action) == 2:
+            elif len(action) == 2:# when user enters "skill name"
                 if action[1].capitalize() in hero.skills_unlocked:
                     current_skill = hero.skills_unlocked[action[1].capitalize()]
+                    #various situations in which the user's choice of action is redundant
                     if current_skill.use_cost > hero.mana:
                         print("Insufficient mana!\n")
                         continue
@@ -230,7 +242,7 @@ def get_action(hero):
                         print("You are at the defense limit.\n")
                     valid_action = True
                     continue
-                else:
+                else: #These commands prevent the user from entering an invalid command in various situations
                     print("You do not know that skill.")
                     continue
             else:

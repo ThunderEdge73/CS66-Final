@@ -34,28 +34,45 @@ class QuestLog:
 
 class XPBar:
     def __init__(self):
+        '''
+        Creates the XP Bar
+        No parameters or return values
+        O(1)
+        '''
         self.progress = 0
         self.cap = 100
         self.level = 1
         self.level_cap = False
 
     def gain_xp(self, amount, hero):
+        '''
+        Adds xp to the bar
+        Parameters: amount of xp being added, hero the xp bar belongs to
+        Returns: nothing
+        All cases: O(1)
+        '''
         if self.level_cap == False:
             self.progress += amount
-            if self.progress >= self.cap:
+            if self.progress >= self.cap:#initiates level up if required xp has been reached
                 self.level_up(hero)
     
     def level_up(self, hero):
+        '''
+        Executes the level up for the hero and xp_bar
+        Parameters: Hero xp is being added to
+        Returns: nothing
+        All cases: O(1)
+        '''
         self.level += 1
         hero.level += 1
-        if hero.level == 6:
+        if hero.level == 6: #hero level limit is 6
             self.level_cap = True
             self.progress = 0
         else:
-            self.progress -= self.cap
-            self.cap *= 1.5
+            self.progress -= self.cap #resets level progress plus the extra xp before level up
+            self.cap *= 1.5 #increase required xp
             level_up_message = []
-            for i in range(3):
+            for i in range(3): #adds heros stat buffs
                 stat = random.choice(["max_hp", "attack", "speed", "luck"])
                 if stat == "max_hp":
                     hero.max_hp += 10
@@ -69,9 +86,14 @@ class XPBar:
                 elif stat == "luck":
                     hero.luck += 0.2
                     level_up_message.append("luck")
-            hero.level_up_message(level_up_message)
+            hero.level_up_message(level_up_message)#creates level up message
     
-    def __repr__(self):
+    def __repr__(self): 
+        '''
+        Prints the users level and how much until their next level
+        Parameters and Returns: none
+        All cases: O(1)
+        '''
         if self.level_cap == True:
             return f"LVL: {self.level} | AT LEVEL CAP"
         else:

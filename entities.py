@@ -73,17 +73,23 @@ class Hero:
     def learn_skill(self, skill):
         self.skills_unlocked[skill.name] = skill
         self.mana -= skill.cost
-        if skill.type == "passive":
+        if skill.type == "passive": #new command for passive skills that have stat boosts
             self.process_skill(skill)
         else:
             print(f"You learned {skill.name}!")
 
     def process_skill(self, skill):
+        '''
+        Adds the passive skill changes to the hero's attributes
+        Parameters: the skill being unlocked
+        Returns: nothing, but prints the skill effect
+        All cases: O(1)
+        '''
         effect = skill.effect
-        modifier = float(effect[1])
-        stat = effect[2]
+        modifier = float(effect[1]) #skill effects are structured as "## effect_type" #this is the number of increase
+        stat = effect[2] #name of the stat
         return_string = f"You learned {skill.name}! "
-        if stat == "max_hp":
+        if stat == "max_hp":  #adds modifier to respective stat
             self.max_hp += int(modifier)
             return_string += f"MAX HP increased by {int(modifier)}"
         elif stat == "speed":
@@ -98,6 +104,12 @@ class Hero:
         self.quest_log.add_entry(description)
     
     def level_up_message(self, message):
+        '''
+        Creates a message when the hero levels up explaining what the stat boosts are
+        Parameters: message, a string of the stat being increased
+        Prints the stat and how much it increased
+        All cases: O(1)
+        '''
         return_string = f"You leveled up! LVL: {self.level} | Stat Growth:"
         for stat in message:
             if stat == "max_hp":
