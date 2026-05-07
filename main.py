@@ -120,7 +120,7 @@ def main():
         elif action == "heal":
             if len(parts) < 2:
                 heal_skills = "Healing skills available: "
-                for i in hero.skills_unlocked:
+                for i in hero.skills_unlocked: #prints a list of all the healing skills that the user has available
                     if i == "Dia":
                         heal_skills += "Dia: +30 HP, 3 Mana "
                     elif i == "Diarama":
@@ -132,18 +132,18 @@ def main():
                 print(heal_skills)
                 continue
             heal = parts[1].capitalize()
-            if heal not in ["Dia", "Diarama", "Diarahan"]:
+            if heal not in ["Dia", "Diarama", "Diarahan"]: #checks if the command is one of the healing skills
                 print("Invalid skill")
             else:
-                if hero.hp == hero.max_hp:
+                if hero.hp == hero.max_hp: #does not allow healing if at full health
                     print("You are already fully healed.")
                 elif heal in hero.skills_unlocked:
-                    if hero.mana < skill_tree.nodes[heal].use_cost:
+                    if hero.mana < skill_tree.nodes[heal].use_cost: #checks if hero has required mana to heal
                         print("Insufficient mana")
                     else:
-                        hero.hp += int(skill_tree.nodes[heal].effect[0])
-                        hero.mana -= skill_tree.nodes[heal].use_cost
-                        if hero.hp > hero.max_hp:
+                        hero.hp += int(skill_tree.nodes[heal].effect[0]) #assigns the health increase to the hero 
+                        hero.mana -= skill_tree.nodes[heal].use_cost #takes the mana cost from the hero
+                        if hero.hp > hero.max_hp: #sets the hero hp to full if it excedes the max
                             hero.hp = hero.max_hp
                         print(f"You healed! HP: {hero.hp} / {hero.max_hp}")
                 else:
@@ -162,16 +162,18 @@ def main():
                 print(f"Invalid stat to scan")
                 continue
             print(get_tactical_report(hero.location.enemies, checked_stat))
+        
         elif action == "path":
             if len(parts) != 3:
                 continue
             start = game_world.locations[parts[1].title()]
             end = game_world.locations[parts[2].title()]
             print(game_world.get_path(start, end)[1])
+        
         elif action == "talk":
-            creature = hero.location.allies
-            ally_data = data["assets"]["allies"]
-            for i in range(len(ally_data)):
+            creature = hero.location.allies #accesses the ally for that location
+            ally_data = data["assets"]["allies"] #accesses the ally data
+            for i in range(len(ally_data)):# loops through the data to find the proper ally data and assign it to an ally class
                 ally_creature = [ally_data[i]["name"]]
                 if ally_creature == creature:
                     ally = Ally(ally_data[i]["name"], ally_data[i]["hp"], ally_data[i]["attack"], ally_data[i]["speed"])
@@ -182,18 +184,17 @@ def main():
             else: 
                 x = hero.party.add_member(ally)
                 print(x)
-                if x == "Party limit reached.":
+                if x == "Party limit reached.":#gives the option to replace the party member if needed
                     print(hero.party)
                     party_raw = input(f"\nWould you like to replace a party member? [yes, no]: ")
                     party_command = get_safe_input(party_raw)
                     if party_command == "yes":
-                        replace_command = int(input(f"\nWhich member would you like to replace? [1, 2]: "))
+                        replace_command = int(input(f"\nWhich member would you like to replace? [1, 2]: "))#selects the party member being replaced
                         if replace_command == 1:
                             y = hero.party.replace_member(hero.party.members[0], ally)
                             print(y)
                         else: 
-                            hero.party.remove_member(hero.party.members[1])
-                            y = hero.party.add_member(ally)
+                            y = hero.party.replace_member(hero.party.members[1], ally)
                             print(y)
         #  Saving and loading the game is done through serialization, a technique we have not learned. You can see more
         # of this technique in CS 67! For now, you can just use the functions I've provided in storage.py.

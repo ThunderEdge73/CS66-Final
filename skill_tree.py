@@ -22,8 +22,8 @@ class SkillNode:
     def __init__(self, name, data):
         self.name = name
         self.type = data['type']
-        self.cost = data['cost']
-        self.use_cost = data['use_cost']
+        self.cost = data['cost'] #added requirements for mana cost and level
+        self.use_cost = data['use_cost'] 
         self.level = data['level']
         self.effect = data['effect'].split()
         self.req_names = data['requirements'] # String name of the parent
@@ -43,40 +43,63 @@ class SkillTree:
                     node.req_nodes.append(self.nodes[req])
 
     def can_unlock(self, skill_name, hero):
-        for req in self.nodes[skill_name].req_names:
+        '''
+        Checks if the hero meets the requirements for unlocking the skill
+        Parameters: the skill being unlocked and the hero 
+        Returns: True if the hero can unlock, the name of the requirement needed to unlock
+        Best Case: O(1)
+        Worst Case: O(n)
+        '''
+        for req in self.nodes[skill_name].req_names: #creates a list of needed prereqs
             if req not in hero.skills_unlocked:
                 return "pre-req"
-        if self.nodes[skill_name].level > hero.level:
+        if self.nodes[skill_name].level > hero.level: #checks if the hero is at the needed level
             return "level"
-        if self.nodes[skill_name].cost > hero.mana:
+        if self.nodes[skill_name].cost > hero.mana: #checks if the hero has enough mana
             return "mana"
         return True
     
     def check_skills(self, unlocked_skills):
+        '''
+        Gives a list of all the skills in which the user has all the prereqs for
+        Parameters: a list of all the skills the hero has unlocked
+        Returns: a list of all the skills that user has learned the prereqs of
+        Best Case: O(1)
+        Worst Case: O(n)
+        '''
         skills_list = []
-        if unlocked_skills == {}:
-            skills_list.append("Agi")
+        if unlocked_skills == {}: #if the user does not have any skills unlocked, Agi is the only available skill
+            skills_list.append("Agi") 
         else:
-            for skill in self.nodes:
+            for skill in self.nodes: #loops through the skills to find the ones that are available
                 if self.nodes[skill].req_names != []:
                     for i in range(len(self.nodes[skill].req_names)):
-                        if self.nodes[skill].req_names[i] in unlocked_skills and skill not in unlocked_skills:
+                        #if the user has unlocked the preregs but not this skill it will be added to the list
+                        if self.nodes[skill].req_names[i] in unlocked_skills and skill not in unlocked_skills: 
                             skills_list.append(skill)
                             break
         return skills_list
     
     def available_skills(self, hero):
+        '''
+        Creates a string of all the available skills and their requirements
+        Parameters: the hero
+        Returns: a string with the information
+        Best Case: O(1)
+        Worst Case: O(n)
+        '''
         return_string = ""
-        for skill in self.check_skills(hero.skills_unlocked):
-            return_string += f"{skill}: LVL {self.nodes[skill].level}, {self.nodes[skill].cost} Mana, REQS: "
+        for skill in self.check_skills(hero.skills_unlocked):#loops through all the available skills
+            return_string += f"{skill}: LVL {self.nodes[skill].level}, {self.nodes[skill].cost} Mana, REQS: " #includes level, mana, and prereqs required
+            #adds the prereqs based on the number required
             if self.nodes[skill].req_names == []:
                 return_string += "None"
             elif len(self.nodes[skill].req_names) == 1:
                 return_string += f"{self.nodes[skill].req_names[0]} | "
-            else:
+            else: #if the skill has 2 or more
                 for req in self.nodes[skill].req_names:
                     if req == self.nodes[skill].req_names[-1]:
-                        return_string += f"{req}"
+                        return_string += f"{req}" #if the req is the last in the list no comma is added
                     else:
                         return_string += f"{req}, "
                 return_string += " | "
