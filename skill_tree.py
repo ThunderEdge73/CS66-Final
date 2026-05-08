@@ -23,6 +23,7 @@ class SkillNode:
         self.name = name
         self.type = data['type']
         self.cost = data['cost'] #added requirements for mana cost and level
+
         self.use_cost = data['use_cost'] 
         self.level = data['level']
         self.effect = data['effect'].split()
@@ -48,7 +49,7 @@ class SkillTree:
         Parameters: the skill being unlocked and the hero 
         Returns: True if the hero can unlock, the name of the requirement needed to unlock
         Best Case: O(1)
-        Worst Case: O(n)
+        Worst Case: O(n * k) where k is the amount of requirements per skill
         '''
         for req in self.nodes[skill_name].req_names: #creates a list of needed prereqs
             if req not in hero.skills_unlocked:
@@ -65,7 +66,7 @@ class SkillTree:
         Parameters: a list of all the skills the hero has unlocked
         Returns: a list of all the skills that user has learned the prereqs of
         Best Case: O(1)
-        Worst Case: O(n)
+        Worst Case: O(n * k) where k is the amount of requirements per skill
         '''
         skills_list = []
         if unlocked_skills == {}: #if the user does not have any skills unlocked, Agi is the only available skill
@@ -86,7 +87,7 @@ class SkillTree:
         Parameters: the hero
         Returns: a string with the information
         Best Case: O(1)
-        Worst Case: O(n)
+        Worst Case: O(n * k) where k is the amount of requirements per skill
         '''
         return_string = ""
         for skill in self.check_skills(hero.skills_unlocked):#loops through all the available skills
