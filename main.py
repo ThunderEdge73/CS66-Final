@@ -164,10 +164,10 @@ def main():
             print(get_tactical_report(hero.location.enemies, checked_stat))
         
         elif action == "path":
-            if len(parts) != 3:
+            if len(parts) > 3 or len(parts) < 2:
                 continue
-            start = game_world.locations[parts[1].title()]
-            end = game_world.locations[parts[2].title()]
+            start = game_world.locations[parts[1].title() if len(parts) == 3 else hero.location.name.title()]
+            end = game_world.locations[parts[2].title() if len(parts) == 3 else parts[1].title()]
             print(game_world.get_path(start, end)[1])
         
         elif action == "talk":

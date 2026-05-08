@@ -1,5 +1,6 @@
 import time
 from utils import get_safe_input
+from random import randint
 
 def run_battle(hero, enemy, party):
     "Modified the battle loop to include party members and extra hero actions for battle"
@@ -27,7 +28,7 @@ def run_battle(hero, enemy, party):
     combatState = {
         "hero": hero,
         "allies": party_members,
-        "enemy": enemy
+        "enemy": enemy,
     }
 
     hero.strength = 1
@@ -35,8 +36,10 @@ def run_battle(hero, enemy, party):
     guard = False
 
     print(f"Initiative Order: {[c.name for c in combatants]}")
-    
+    turn_count = 1
     while hero.hp > 0 and enemy.hp > 0:
+        combatState["turn"] = turn_count
+        turn_count += 1
         for entity in combatants:
             if entity.hp <= 0: continue 
             
@@ -80,10 +83,20 @@ def run_battle(hero, enemy, party):
                         guard = True
                         hero.defense += 1
                 else:
-                    print(f"\n{enemy.name} attacks!")
-                    dmg = round(enemy.attack / hero.defense)
-                    hero.hp -= dmg
-                    print(f"You took {dmg} damage!")
+                    enemy.blocking = False
+                    result = enemy.ai.getEnemyAction(combatState)
+                    if result.get("effect") == "defend":
+                        print(f"\n{enemy.name} raises their guard...")
+                        enemy.blocking = True
+                    if result.get("effect") == "attack":
+                        print(f"\n{enemy.name} attacks!")
+                        dmg = round(enemy.attack / hero.defense)
+                        hero.hp -= dmg
+                        print(f"You took {dmg} damage!")
+                    if "strength" in result.get("effect"):
+                        print(f"\n{enemy.name} becomes more vicious...")
+                        enemy.attack += int(result.get("effect").split()[1])
+                        print(f"{enemy.name}'s attack rose by {int(result.get("effect").split()[1])}!")
             if ally_one != None and ally_two == None:
                 #battle with one ally
                 if entity == hero: #hero and enemy actions function the same as in a 1v1 battle
@@ -129,10 +142,39 @@ def run_battle(hero, enemy, party):
                     enemy.take_damage(dmg)
                     print(f"\n{ally_one.name} attacks for {dmg} damage!")
                 else:
-                    print(f"\n{enemy.name} attacks!")
-                    dmg = round(enemy.attack / hero.defense)
-                    hero.hp -= dmg
-                    print(f"You took {dmg} damage!")
+                    enemy.blocking = False
+                    result = enemy.ai.getEnemyAction(combatState)
+                    if result.get("effect") == "defend":
+                        print(f"\n{enemy.name} raises their guard...")
+                        enemy.blocking = True
+                    if result.get("effect") == "attack":
+                        should_target_hero = False
+                        should_target_ally1 = False
+                        if result.get("target") == "random":
+                            rand_int = randint(1, 2)
+                            if rand_int == 1:
+                                should_target_hero = True
+                            else:
+                                should_target_ally1 = True
+                        elif result.get("target") == "lowest_hp":
+                            if hero.hp < ally_one.hp:
+                                should_target_hero = True
+                            else:
+                                should_target_ally1 = True
+                        if result.get("target") == "hero" or should_target_hero:
+                            print(f"\n{enemy.name} attacks!")
+                            dmg = round(enemy.attack / hero.defense)
+                            hero.hp -= dmg
+                            print(f"You took {dmg} damage!")
+                        elif should_target_ally1:
+                            print(f"\n{enemy.name} attacks {ally_one.name}!")
+                            dmg = round(enemy.attack / hero.defense)
+                            ally_one.hp -= dmg
+                            print(f"{ally_one.name} took {dmg} damage!")
+                    if "strength" in result.get("effect"):
+                        print(f"\n{enemy.name} becomes more vicious...")
+                        enemy.attack += int(result.get("effect").split()[1])
+                        print(f"{enemy.name}'s attack rose by {int(result.get("effect").split()[1])}!")
             if ally_two != None and ally_one != None:
                 #battle with two allies
                 if entity == hero:
@@ -181,13 +223,51 @@ def run_battle(hero, enemy, party):
                     enemy.take_damage(dmg)
                     print(f"\n{ally_two.name} attacks for {dmg} damage!")
                 else:
-                    print(f"\n{enemy.name} attacks!")
-                    dmg = round(enemy.attack / hero.defense)
-                    hero.hp -= dmg
-                    print(f"You took {dmg} damage!")
+                    enemy.blocking = False
+                    result = enemy.ai.getEnemyAction(combatState)
+                    if result.get("effect") == "defend":
+                        print(f"\n{enemy.name} raises their guard...")
+                        enemy.blocking = True
+                    if result.get("effect") == "attack":
+                        should_target_hero = False
+                        should_target_ally1 = False
+                        should_target_ally2 = False
+                        if result.get("target") == "random":
+                            rand_int = randint(1, 3)
+                            if rand_int == 1:
+                                should_target_hero = True
+                            elif rand_int == 2:
+                                should_target_ally1 = True
+                            else:
+                                should_target_ally2 = True
+                        elif result.get("target") == "lowest_hp":
+                            if hero.hp < ally_one.hp and hero.hp < ally_two.hp:
+                                should_target_hero = True
+                            elif ally_one.hp < hero.hp and ally_one.hp < ally_two.hp:
+                                should_target_ally1 = True
+                            else:
+                                should_target_ally2 = True
+                        if result.get("target") == "hero" or should_target_hero:
+                            print(f"\n{enemy.name} attacks!")
+                            dmg = round(enemy.attack / hero.defense)
+                            hero.hp -= dmg
+                            print(f"You took {dmg} damage!")
+                        elif should_target_ally1:
+                            print(f"\n{enemy.name} attacks {ally_one.name}!")
+                            dmg = round(enemy.attack / hero.defense)
+                            ally_one.hp -= dmg
+                            print(f"{ally_one.name} took {dmg} damage!")
+                        elif should_target_ally2:
+                            print(f"\n{enemy.name} attacks {ally_two.name}!")
+                            dmg = round(enemy.attack / hero.defense)
+                            ally_two.hp -= dmg
+                            print(f"{ally_two.name} took {dmg} damage!")
+                    if "strength" in result.get("effect"):
+                        print(f"\n{enemy.name} becomes more vicious...")
+                        enemy.attack += int(result.get("effect").split()[1])
+                        print(f"{enemy.name}'s attack rose by {int(result.get("effect").split()[1])}!")
                 
             time.sleep(0.5) 
-
     if hero.hp > 0:
         print(f"VICTORY! You defeated {enemy.name}. Gained {round(enemy.xp * hero.luck)} XP and {round(enemy.mana * hero.luck)} MANA") # If you wanted to implement a looting system, you could do so here.
         hero.log_event(f"Defeated {enemy.name}") # Add it to the hero's QuestLog

@@ -228,13 +228,14 @@
                 "hp": 30,
                 "attack": 10,
                 "speed": 5,
+                "xp": 20,
+                "mana": 5,
                 "ai": {
-                    "type": "random",
-                    "choices": [
-                        {
-                            "type": "attack"
-                        }
-                    ]
+                    "type": "attack",
+                    "target": "random"
+                },
+                "affinities": {
+                    "light": "str"
                 }
             },
             {
@@ -243,7 +244,25 @@
                 "attack": 6,
                 "speed": 15,
                 "xp": 15,
-                "mana": 3
+                "mana": 3,
+                "ai": {
+                    "type": "first_turn",
+                    "choices": [
+                        {
+                            "type": "strength 2",
+                            "target": "self"
+                        },
+                        {
+                            "type": "attack",
+                            "target": "hero"
+                        }
+                    ]
+                },
+                "affinities": {
+                    "lightning": "wk",
+                    "ice": "str",
+                    "fire": "str"
+                }
             },
             {
                 "name": "Kobold",
@@ -251,7 +270,32 @@
                 "attack": 6,
                 "speed": 15,
                 "xp": 10,
-                "mana": 3
+                "mana": 3,
+                "ai": {
+                    "type": "low_hp",
+                    "choices": [
+                        {
+                            "type": "random",
+                            "choices": [
+                                {
+                                    "type": "attack",
+                                    "target": "lowest_hp"
+                                },
+                                {
+                                    "type": "defend",
+                                    "target": "self"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "attack",
+                            "target": "lowest_hp"
+                        }
+                    ]
+                },
+                "affinities": {
+                    "wind": "str"
+                }
             },
             {
                 "name": "Wight",
@@ -259,7 +303,27 @@
                 "attack": 8,
                 "speed": 3,
                 "xp": 20,
-                "mana": 4
+                "mana": 4,
+                "ai": {
+                    "type": "random",
+                    "choices": [
+                        {
+                            "type": "strength 2",
+                            "target": "self"
+                        },
+                        {
+                            "type": "attack",
+                            "target": "random"
+                        },
+                        {
+                            "type": "defend",
+                            "target": "self"
+                        }
+                    ]
+                },
+                "affinities": {
+                    "dark": "str"
+                }
             }
         ],
         "locations": {

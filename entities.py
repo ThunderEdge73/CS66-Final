@@ -1,16 +1,22 @@
 from containers import *
-
+from enemy_ai import *
 class Enemy:
     def __init__(self, name, enemy_stats):
         self.name = name
         self.hp = enemy_stats['hp']
         self.attack = enemy_stats['attack']
         self.speed = enemy_stats['speed']
-        self.xp = enemy_stats['hp']
-        self.mana = enemy_stats['attack']
+        self.xp = enemy_stats['xp']
+        self.mana = enemy_stats['mana']
+        self.ai = parse_enemy_ai(enemy_stats)
+        self.blocking = False
     
     def take_damage(self, amount):
-        self.hp -= amount
+        hp_lost = amount
+        if self.blocking:
+            print(f"{self.name} blocked the attack!")
+            hp_lost = round(hp_lost / 2)
+        self.hp -= hp_lost
         if self.hp < 0: self.hp = 0
 
     def __str__(self):
@@ -140,6 +146,7 @@ class Party:
         '''
         self.limit = 2
         self.members = []
+        self.length = 0
 
     def add_member(self, ally):
         '''
