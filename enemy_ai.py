@@ -5,7 +5,7 @@ class DecisionTree():
         self.root = root
     # Takes in a representation of the current combat in dictionary format
     # Returns a dictionary of enemy effects
-    def getEnemyAction(self, combatState): # O(n^2)
+    def getEnemyAction(self, combatState): # O(n^2) worst case, O(n) best case
         # where n is the number of levels in the tree
         current_node = self.root
         while isinstance(current_node, Choice):
@@ -19,7 +19,7 @@ class EnemyAction():
         # "effect": effect key
         # "targets_allies": whether or not it affects allied enemies
         self.effect = effect
-    # Returns the current action that this node represents
+    # Returns the current action that this node represents, best and worst case O(1)
     def takeAction(self):
         return self.effect
     def __str__(self):
@@ -36,7 +36,7 @@ class DecisionNode(Choice):
         self.nodes = nodes
     # Accepts a representation of the current function
     # Returns the node that should be considered next
-    def getChoice(self, combatState):  # O(n)
+    def getChoice(self, combatState):  # best and worst case O(1)
         if parse_decision(self.decider_type, combatState) >= len(self.nodes):
             return EnemyAction({})
         return self.nodes[parse_decision(self.decider_type, combatState)]
@@ -48,8 +48,9 @@ class RandomDecision(Choice):
             self.choices = [1] * len(nodes)
         else:
             self.choices = choice_weights
-
-    def getChoice(self, _):  # O(n) where n is the length of the list
+    # worst case is O(n) where n is the length of the list
+    # best case is O(1)
+    def getChoice(self, _):
         weight_sum = sum(self.choices)
         chosen = random.randint(1, weight_sum)
         print(chosen)
@@ -64,7 +65,9 @@ class RandomDecision(Choice):
 def get_hp_percent(entity):
     return entity.hp / entity.max_hp
 
-# Decision function is O(1)
+# Decision function is best and worst case O(1)
+# Returns an index based on the current combat state
+# This allows traversals of the decision tree to depend on current combat state
 def parse_decision(decision_type, state):
     if decision_type == "first_turn":
         return 0 if state["turn"] == 1 else 1
@@ -74,6 +77,8 @@ def parse_decision(decision_type, state):
         return 0 if get_hp_percent(state["hero"]) < 0.5 else 1
     return 0
 
+# Translates a dictionary in game_data.json to the correct node type.
+# Best and worst case is O(n) where n is the total number of nodes in the corresponding dictionary
 def get_node_from_entry(dict):
     if dict.get("choices") is None and dict.get("target") is None:
         return EnemyAction({})
@@ -93,6 +98,7 @@ def get_node_from_entry(dict):
             all_subnodes.append(get_node_from_entry(choice))
         return DecisionNode(dict["type"], all_subnodes)
 
+# Wrapper to get_node_from_entry
 def parse_enemy_ai(enemy_data):
     root = enemy_data["ai"]
     return DecisionTree(get_node_from_entry(root))
