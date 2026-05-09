@@ -4,6 +4,7 @@ class Enemy:
     def __init__(self, name, enemy_stats):
         self.name = name
         self.hp = enemy_stats['hp']
+        self.max_hp = self.hp
         self.attack = enemy_stats['attack']
         self.speed = enemy_stats['speed']
         self.xp = enemy_stats['xp']
@@ -215,7 +216,6 @@ class Party:
         if self.members == []:
             party_print = "You have no party members"
         else:
-            for i in range(self.members):
-                x = str(print(self.members[i]))
-                party_print += f"{x} \n"
+            for i in range(len(self.members)):
+                party_print += f"{self.members[i]} \n"
         return party_print
