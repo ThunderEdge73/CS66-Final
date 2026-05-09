@@ -130,7 +130,7 @@ class Hero:
         print(return_string)
 
     def __str__(self):
-        return f"[HERO] {self.name} \nHP: {self.hp} / {self.max_hp} \nMANA: {self.mana} | ATK: {self.attack} \nSPD: {self.speed} | LUCK: {self.luck} \n{self.xp} \n\nParty: \n{self.party}"
+        return f"[HERO] {self.name} \nHP: {self.hp} / {self.max_hp} \nMANA: {round(self.mana,1)} | ATK: {self.attack} \nSPD: {self.speed} | LUCK: {self.luck} \n{self.xp} \n\nParty: \n{self.party}"
 
     def __add__(self, item):
         self.inventory.append(item)

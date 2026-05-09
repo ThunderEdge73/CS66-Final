@@ -51,10 +51,12 @@ class XPBar:
         Returns: nothing
         All cases: O(1)
         '''
-        if self.level_cap == False:
+        if not self.level_cap:
             self.progress += amount
             if self.progress >= self.cap:#initiates level up if required xp has been reached
                 self.level_up(hero)
+        else:
+            print("At level cap.")
     
     def level_up(self, hero):
         '''
@@ -71,22 +73,22 @@ class XPBar:
         else:
             self.progress -= self.cap #resets level progress plus the extra xp before level up
             self.cap *= 1.5 #increase required xp
-            level_up_message = []
-            for i in range(3): #adds heros stat buffs
-                stat = random.choice(["max_hp", "attack", "speed", "luck"])
-                if stat == "max_hp":
-                    hero.max_hp += 10
-                    level_up_message.append("max_hp")
-                elif stat == "attack":
-                    hero.attack += 1
-                    level_up_message.append("attack")
-                elif stat == "speed":
-                    hero.speed += 2
-                    level_up_message.append("speed")
-                elif stat == "luck":
-                    hero.luck += 0.2
-                    level_up_message.append("luck")
-            hero.level_up_message(level_up_message)#creates level up message
+        level_up_message = []
+        for i in range(3): #adds heros stat buffs
+            stat = random.choice(["max_hp", "attack", "speed", "luck"])
+            if stat == "max_hp":
+                hero.max_hp = round(hero.max_hp + 10)
+                level_up_message.append("max_hp")
+            elif stat == "attack":
+                hero.attack = round(hero.attack + 1)
+                level_up_message.append("attack")
+            elif stat == "speed":
+                hero.speed += round(hero.speed + 2)
+                level_up_message.append("speed")
+            elif stat == "luck":
+                hero.luck = round(hero.luck + 0.2, 1)
+                level_up_message.append("luck")
+        hero.level_up_message(level_up_message)#creates level up message
     
     def __repr__(self): 
         '''

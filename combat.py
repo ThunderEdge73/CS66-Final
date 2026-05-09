@@ -49,7 +49,7 @@ def run_battle(hero, enemy, party):
                     if guard == True: #turns off the heros guard (activated via action command)
                         guard = False
                         hero.defense -= 1
-                    print(f"\nYour turn! (HP: {hero.hp} / {hero.max_hp}, MANA: {hero.mana})")
+                    print(f"\nYour turn! (HP: {hero.hp} / {hero.max_hp}, MANA: {round(hero.mana,1)})")
                     action = get_action(hero) #instead of attacking allows players to utilize new commands
                     if action[0] == "attack":
                         dmg = round(hero.attack * hero.strength) #attack is now combined with hero strength
@@ -103,7 +103,7 @@ def run_battle(hero, enemy, party):
                     if guard == True:
                         guard = False
                         hero.defense -= 1
-                    print(f"\nYour turn! (HP: {hero.hp} / {hero.max_hp}, MANA: {hero.mana})")
+                    print(f"\nYour turn! (HP: {hero.hp} / {hero.max_hp}, MANA: {round(hero.mana,1)})")
                     action = get_action(hero)
                     if action[0] == "attack":
                         dmg = round(hero.attack * hero.strength)
@@ -181,7 +181,7 @@ def run_battle(hero, enemy, party):
                     if guard == True:
                         guard = False
                         hero.defense -= 1
-                    print(f"\nYour turn! (HP: {hero.hp} / {hero.max_hp}, MANA: {hero.mana})")
+                    print(f"\nYour turn! (HP: {hero.hp} / {hero.max_hp}, MANA: {round(hero.mana,1)})")
                     action = get_action(hero)
                     if action[0] == "attack":
                         dmg = round(hero.attack * hero.strength)
@@ -269,7 +269,7 @@ def run_battle(hero, enemy, party):
                 
             time.sleep(0.5) 
     if hero.hp > 0:
-        print(f"VICTORY! You defeated {enemy.name}. Gained {round(enemy.xp * hero.luck)} XP and {round(enemy.mana * hero.luck)} MANA") # If you wanted to implement a looting system, you could do so here.
+        print(f"VICTORY! You defeated {enemy.name}. Gained {round(enemy.xp * hero.luck,1)} XP and {round(enemy.mana * hero.luck,1)} MANA") # If you wanted to implement a looting system, you could do so here.
         hero.log_event(f"Defeated {enemy.name}") # Add it to the hero's QuestLog
         hero.xp.gain_xp(enemy.xp * hero.luck, hero)
         hero.mana += enemy.mana * hero.luck
