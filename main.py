@@ -218,6 +218,7 @@ fight -> Initiates a fight in the current area against an enemy.
 scan [stat] -> Scan the current area
 talk -> Talk to a potential ally
 world -> Display the current world.
+path [location] -> Searches for a path to a desired loaction and outputs directions.
 save -> Save the game.
 exit -> Exit the game.\n""")
             print(hero)
